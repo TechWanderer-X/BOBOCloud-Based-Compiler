@@ -15,5 +15,14 @@ contextBridge.exposeInMainWorld('api', {
   createFolder: (payload) => ipcRenderer.invoke('create-folder', payload),
   renameEntry: (payload) => ipcRenderer.invoke('rename-entry', payload),
   deleteEntry: (payload) => ipcRenderer.invoke('delete-entry', payload),
-  onOpenServerSettings: (cb) => ipcRenderer.on('open-server-settings', cb)
+  onOpenServerSettings: (cb) => ipcRenderer.on('open-server-settings', cb),
+  
+  // Server settings
+  readServerSettings: () => ipcRenderer.invoke('read-server-settings'),
+  writeServerSettings: (settings) => ipcRenderer.invoke('write-server-settings', settings),
+  
+  // Rclone operations
+  executeRclone: (command) => ipcRenderer.invoke('execute-rclone', command),
+  checkRclone: () => ipcRenderer.invoke('check-rclone'),
+  getRclonePath: () => ipcRenderer.invoke('get-rclone-path')
 });

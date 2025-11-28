@@ -170,13 +170,15 @@
   <label>Server IP: <input id="server-ip" type="text" style="width:100%"></label><br><br>
   <label>Root User: <input id="server-user" type="text" style="width:100%"></label><br><br>
   <label>Password: <input id="server-pass" type="password" style="width:100%"></label><br><br>
+  <label>Rclone Path: <input id="rclone-path" type="text" placeholder="Example: F:\rclone\rclone.exe (leave empty to use system PATH)" style="width:100%"></label><br><br>
+  <label>Auto Sync Interval (seconds): <input id="sync-interval" type="number" min="5" max="3600" value="30" style="width:100%"></label><br><br>
   <button id="server-save">Save & Connect</button>
   <button id="server-close">Cancel</button>
 </div>
 
 <!-- Run Result Output -->
-<div id="run-output" style="position:absolute; bottom:0; left:280px; right:0; height:150px; background:#1e1e1e; color:#ccc; overflow:auto; border-top:1px solid #444; padding:8px; font-family:monospace;">
-  <div id="run-log">[Run output will appear here]</div>
+<div id="run-output" style="position:absolute; bottom:0; left:280px; right:0; height:150px; background:#1e1e1e; color:#d4d4d4; overflow:auto; border-top:1px solid #00000033; padding:8px; font-family:'Consolas', 'Monaco', 'Courier New', monospace; font-size:13px; line-height:1.5;">
+  <div id="run-log" style="white-space:pre-wrap; word-wrap:break-word;">[Run output will appear here]</div>
 </div>
 
 </body>
