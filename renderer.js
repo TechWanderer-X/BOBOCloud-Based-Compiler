@@ -500,8 +500,7 @@ async function promptDelete(entryPath, type) {
   const ok = confirm(`Delete ${type}:\n${entryPath}\nThis cannot be undone.`);
   if (!ok) return;
   await window.api.deleteEntry({ entryPath });
-  // Refresh file tree by re-reading the workspace without opening dialog
-  const res = await window.api.pickWorkspace(workspaceRoot);
+  const res = await window.api.pickWorkspace();
   if (res && res.rootPath === workspaceRoot) renderTree(res.tree);
 }
 

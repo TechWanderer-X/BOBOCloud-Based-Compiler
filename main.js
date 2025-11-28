@@ -7,18 +7,33 @@ let watchers = new Map();
 let win;
 let workspaceRoot = null;
 
-// Server settings file path (hardcoded)
-const SERVER_SETTINGS_PATH = path.join('E:', 'PROJECTS', 'my_webSet', 'my-electron-app', 'server-settings.json');
+// Server settings file path (in user's app data directory)
+const { app } = require('electron');
+const SERVER_SETTINGS_PATH = path.join(app.getPath('userData'), 'server-settings.json');
+
 
 // Read server settings from file
 async function readServerSettings() {
   try {
+    // Check if settings file exists in user data directory
     if (fs.existsSync(SERVER_SETTINGS_PATH)) {
       const data = fs.readFileSync(SERVER_SETTINGS_PATH, 'utf-8');
       const settings = JSON.parse(data);
       // Update rclone config when reading settings
       await updateRcloneConfig(settings);
       return settings;
+    } else {
+      // Try to copy default settings from app directory
+      const defaultSettingsPath = path.join(__dirname, 'server-settings.json');
+      if (fs.existsSync(defaultSettingsPath)) {
+        const defaultData = fs.readFileSync(defaultSettingsPath, 'utf-8');
+        const defaultSettings = JSON.parse(defaultData);
+        // Write default settings to user data directory
+        fs.writeFileSync(SERVER_SETTINGS_PATH, defaultData, 'utf-8');
+        // Update rclone config with default settings
+        await updateRcloneConfig(defaultSettings);
+        return defaultSettings;
+      }
     }
   } catch (error) {
     console.error('Error reading server settings:', error);
@@ -48,6 +63,7 @@ async function updateRcloneConfig(settings) {
 
     // Get rclone executable path
     let rcloneExecutable = settings.rclonePath || 'rclone';
+
     
     // Fix rclone path if it's a directory
     if (rcloneExecutable) {
@@ -259,7 +275,7 @@ function attachWatcher(dir) {
 
 ipcMain.handle('pick-workspace', async (_e, path) => {
   let folder;
-  if (path) {
+  if (path !== undefined) {
     folder = path;
   } else {
     const result = await dialog.showOpenDialog(win, { properties: ['openDirectory'] });
